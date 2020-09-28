@@ -1,26 +1,27 @@
-import React from "react";
-import logo from "./logo.svg";
-import "./App.css";
+import { Horizontal, Vertical } from "gls/lib";
+import * as React from "react";
+import { searchPodcasts } from "./features/podcasts";
+import { Sidebar } from "./sidebar/Sidebar";
+import { backgroundColor } from "./styles";
 
-const App: React.FC = () => {
+interface Props {}
+
+export const App: React.FC<Props> = ({}) => {
+  
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Vertical>
+      <Horizontal
+        style={{
+          width: "100%",
+          height: "100vh",
+          backgroundColor: backgroundColor.toHexString(),
+          color: "white",
+        }}
+      >
+        <Sidebar />
+        <Vertical>episodes</Vertical>
+      </Horizontal>
+      <Horizontal>player</Horizontal>
+    </Vertical>
   );
 };
-
-export default App;
