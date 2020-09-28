@@ -1,7 +1,7 @@
-import { Horizontal, Vertical, HorizontalSpacer, Stretch } from "gls/lib";
+import { Button, Popover } from "antd";
+import { Horizontal, HorizontalSpacer, Stretch, Vertical } from "gls/lib";
 import * as React from "react";
 import { Podcast } from "../features/podcasts";
-import { Button, Popover } from "antd";
 import { InfoCircleOutlined } from "@ant-design/icons";
 
 interface Props {
@@ -10,7 +10,7 @@ interface Props {
   isSelected: boolean;
 }
 
-export const SidebarPodcastItem: React.FC<Props> = ({
+export const AddPodcastModalSearchItem: React.FC<Props> = ({
   podcast,
   onSelect,
   isSelected,
@@ -36,10 +36,21 @@ export const SidebarPodcastItem: React.FC<Props> = ({
       <img src={artworkUrl100} />
       <Stretch>
         <Vertical verticalAlign="center">
-          <h4 style={{ color: "white" }}>{collectionName}</h4>
+          <h4>{collectionName}</h4>
         </Vertical>
       </Stretch>
-
+      <Popover
+        placement="top"
+        content={
+          <pre style={{ width: 500, maxHeight: 300, overflowY: "auto" }}>
+            {JSON.stringify(podcast, null, 2)}
+          </pre>
+        }
+      >
+        <Button>
+          <InfoCircleOutlined />
+        </Button>
+      </Popover>
       <HorizontalSpacer space={20} />
     </Horizontal>
   );

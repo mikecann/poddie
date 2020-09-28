@@ -1,2 +1,7 @@
 # poddie
- simple desktop podcast player
+
+Simple desktop podcast player
+
+## Todo
+
+Should use XState instead?

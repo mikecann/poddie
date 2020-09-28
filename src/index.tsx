@@ -1,18 +1,27 @@
 import { GLSDefaults } from "gls/lib";
+import { Provider } from "jotai";
 import React from "react";
 import ReactDOM from "react-dom";
 import { queryCache, ReactQueryCacheProvider } from "react-query";
 import { App } from "./App";
-import { AppContext } from "./features/app";
+import { addedPodcastsAtom } from "./features/podcasts";
+import {Persistor} from './persistance/Persistor';
 import "./index.css";
 
-ReactDOM.render(
-  <GLSDefaults.Provider value={{ verticalSpacing: 0, horizontalSpacing: 0 }}>
-    <ReactQueryCacheProvider queryCache={queryCache}>
-      <AppContext.Provider value={{}}>
-        <App />
-      </AppContext.Provider>
-    </ReactQueryCacheProvider>
-  </GLSDefaults.Provider>,
-  document.getElementById("root")
-);
+const bootstrap = () => {
+  ReactDOM.render(
+    <Provider>
+      <Persistor />
+      <GLSDefaults.Provider
+        value={{ verticalSpacing: 0, horizontalSpacing: 0 }}
+      >
+        <ReactQueryCacheProvider queryCache={queryCache}>
+          <App />
+        </ReactQueryCacheProvider>
+      </GLSDefaults.Provider>
+    </Provider>,
+    document.getElementById("root")
+  );
+};
+
+bootstrap();

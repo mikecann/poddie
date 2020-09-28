@@ -2,21 +2,27 @@ import { Horizontal, Vertical, HorizontalSpacer, Stretch } from "gls/lib";
 import * as React from "react";
 import { Podcast } from "../features/podcasts";
 import { Button, Popover } from "antd";
-import { InfoCircleOutlined } from "@ant-design/icons";
+import {
+  HeartOutlined,
+  InfoCircleOutlined,
+  PlayCircleFilled,
+} from "@ant-design/icons";
+import { Item } from "rss-parser";
 
 interface Props {
-  podcast: Podcast;
+  item: Item;
   onSelect: () => any;
   isSelected: boolean;
 }
 
-export const SidebarPodcastItem: React.FC<Props> = ({
-  podcast,
+export const PodcastDetailsFeedItem: React.FC<Props> = ({
+  item,
   onSelect,
   isSelected,
 }) => {
   const [over, setOver] = React.useState(false);
-  const { artworkUrl100, collectionName } = podcast;
+  const { title, pubDate, content, enclosure } = item;
+
   return (
     <Horizontal
       spacing={20}
@@ -33,14 +39,21 @@ export const SidebarPodcastItem: React.FC<Props> = ({
       }}
       verticalAlign="center"
     >
-      <img src={artworkUrl100} />
+      {/* <img src={artworkUrl100} /> */}
+      <HeartOutlined
+        style={{ fontSize: "1.25em", cursor: "pointer", marginLeft: 10 }}
+      />
       <Stretch>
-        <Vertical verticalAlign="center">
-          <h4 style={{ color: "white" }}>{collectionName}</h4>
+        <Vertical>
+          <h4 style={{ color: "white" }}>{title}</h4>
+          {isSelected && <h5 style={{ color: "white" }}>{content}</h5>}
         </Vertical>
       </Stretch>
-
-      <HorizontalSpacer space={20} />
+      {isSelected && (
+        <PlayCircleFilled
+          style={{ fontSize: "2em", cursor: "pointer", marginRight: 10 }}
+        />
+      )}
     </Horizontal>
   );
 };
