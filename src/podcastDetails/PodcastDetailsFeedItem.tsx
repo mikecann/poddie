@@ -13,12 +13,14 @@ interface Props {
   item: Item;
   onSelect: () => any;
   isSelected: boolean;
+  onPlayClicked: () => any;
 }
 
 export const PodcastDetailsFeedItem: React.FC<Props> = ({
   item,
   onSelect,
   isSelected,
+  onPlayClicked,
 }) => {
   const [over, setOver] = React.useState(false);
   const { title, pubDate, content, enclosure } = item;
@@ -52,6 +54,7 @@ export const PodcastDetailsFeedItem: React.FC<Props> = ({
       {isSelected && (
         <PlayCircleFilled
           style={{ fontSize: "2em", cursor: "pointer", marginRight: 10 }}
+          onClick={onPlayClicked}
         />
       )}
     </Horizontal>

@@ -11,6 +11,8 @@ import {
   podcastInfoModalIsOpenAtom,
   podcastInfoModalPodcastAtom,
 } from "../podcastInfo/PodcastInfoModal";
+import { downloadEpisode } from "../downloading/downloadEpisode";
+import { Item } from "rss-parser";
 
 interface Props {
   podcast: Podcast;
@@ -31,6 +33,8 @@ export const PodcastDetails: React.FC<Props> = ({ podcast }) => {
   const { isLoading, error, data } = useQuery(["podcast-feed", feedUrl], () =>
     loadPodcastFeed(feedUrl)
   );
+
+  const onPlayClicked = (episode: Item) => downloadEpisode(episode);
 
   return (
     <Vertical style={{ padding: 20, width: "100%" }} spacing={20}>
@@ -58,6 +62,7 @@ export const PodcastDetails: React.FC<Props> = ({ podcast }) => {
             isSelected={seletedItemId == item.guid}
             onSelect={() => setSelectedItemId(item.guid)}
             item={item}
+            onPlayClicked={() => onPlayClicked(item)}
           />
         ))}
       </Vertical>
