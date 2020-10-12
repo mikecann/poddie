@@ -17,4 +17,9 @@ module.exports = {
   eslint: {
     enable: false /* (default value) */,
   },
+  webpack: {
+    configure: {
+      target: "electron-renderer",
+    },
+  },
 };

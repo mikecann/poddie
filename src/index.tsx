@@ -4,24 +4,31 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { queryCache, ReactQueryCacheProvider } from "react-query";
 import { App } from "./App";
-import { addedPodcastsAtom } from "./features/podcasts";
+import { addedPodcastsAtom, selectedPodcastIdAtom } from "./features/podcasts";
 import { AtomPersistor } from "./persistance/AtomPersistor";
 import {
   startPersistingQueryCache,
   depersistQueryCache,
 } from "./persistance/queryCachePersistance";
-import { downloadEpisode } from "./downloading/downloadEpisode";
 import "./index.css";
 
 const bootstrap = () => {
-  
-
   depersistQueryCache();
   startPersistingQueryCache();
 
+
   ReactDOM.render(
     <Provider>
-      <AtomPersistor atom={addedPodcastsAtom} storageKey={"savedPodcasts"} />
+      <AtomPersistor
+        atom={addedPodcastsAtom}
+        defaultValue={[]}
+        storageKey={"savedPodcasts"}
+      />
+      <AtomPersistor
+        atom={selectedPodcastIdAtom}
+        defaultValue={null}
+        storageKey={"selectedPodcastId"}
+      />
       <GLSDefaults.Provider
         value={{ verticalSpacing: 0, horizontalSpacing: 0 }}
       >

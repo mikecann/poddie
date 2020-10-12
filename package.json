@@ -21,6 +21,7 @@
     "electron-is-dev": "^1.2.0",
     "electron-reload": "^1.5.0",
     "gls": "^3.0.1",
+    "got": "^11.7.0",
     "jotai": "^0.7.2",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
@@ -31,6 +32,7 @@
     "typestyle": "^2.1.0"
   },
   "scripts": {
+    "compile": "tsc --noEmit",
     "start": "craco start",
     "build": "craco build",
     "test": "craco test",

@@ -35,6 +35,7 @@ export const Sidebar: React.FC<Props> = ({}) => {
         backgroundColor: backgroundColor.darken(0.05).toHexString(),
       }}
     >
+      <div>foobar !!.4444444....!</div>
       {podcasts.map((p) => (
         <SidebarPodcastItem
           key={p.collectionId}

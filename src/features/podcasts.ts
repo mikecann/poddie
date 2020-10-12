@@ -56,4 +56,4 @@ export const searchPodcasts = async (term: string) => {
 };
 
 export const addedPodcastsAtom = atom<Podcast[]>([]);
-export const selectedPodcastIdAtom = atom<number | undefined>(undefined);
+export const selectedPodcastIdAtom = atom<number | null>(null);

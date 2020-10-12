@@ -34,7 +34,7 @@ export const PodcastDetails: React.FC<Props> = ({ podcast }) => {
     loadPodcastFeed(feedUrl)
   );
 
-  const onPlayClicked = (episode: Item) => downloadEpisode(episode);
+  const onPlayClicked = (episode: Item) => downloadEpisode(podcast, episode);
 
   return (
     <Vertical style={{ padding: 20, width: "100%" }} spacing={20}>
