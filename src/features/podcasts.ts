@@ -1,5 +1,3 @@
-import { atom } from "jotai";
-
 export interface ITunesAPIRequestResponse {
   resultCount: number;
   results: Podcast[];
@@ -54,6 +52,3 @@ export const searchPodcasts = async (term: string) => {
 
   return json.results;
 };
-
-export const addedPodcastsAtom = atom<Podcast[]>([]);
-export const selectedPodcastIdAtom = atom<number | null>(null);

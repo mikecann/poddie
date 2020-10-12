@@ -1,32 +1,17 @@
 import { Button } from "antd";
+import { useStore } from "effector-react";
 import { Vertical } from "gls/lib";
-import { useAtom } from "jotai";
 import * as React from "react";
-import { useQuery } from "react-query";
-import { addPodcastModalIsOpenAtom } from "../addPodcast/AddPodcastModal";
-import {
-  createPodcast,
-  searchPodcasts,
-  addedPodcastsAtom,
-  selectedPodcastIdAtom,
-} from "../features/podcasts";
+import { appStateStore, openModal, selectPodcast } from "../state/app";
 import { backgroundColor } from "../styles";
 import { SidebarPodcastItem } from "./SidebarPodcastItem";
 
 interface Props {}
 
-const tmpPodcast = createPodcast({
-  name: "test posdcast",
-});
-
 export const Sidebar: React.FC<Props> = ({}) => {
-  const [podcasts] = useAtom(addedPodcastsAtom);
-  const [selectedPodcastId, setSelectedPodcastId] = useAtom(
-    selectedPodcastIdAtom
-  );
-  const [_, setIsAddPodcastModalOpen] = useAtom(addPodcastModalIsOpenAtom);
+  const { savedPodcasts, selectedPodcastId } = useStore(appStateStore);
 
-  const onAddPodcastClicked = () => setIsAddPodcastModalOpen(true);
+  const onAddPodcastClicked = () => openModal("addPodcast");
 
   return (
     <Vertical
@@ -35,13 +20,13 @@ export const Sidebar: React.FC<Props> = ({}) => {
         backgroundColor: backgroundColor.darken(0.05).toHexString(),
       }}
     >
-      <div>foobar !!.4444444....!</div>
-      {podcasts.map((p) => (
+      <div>foobar !!.sdsdfasdfasdff....!</div>
+      {savedPodcasts.map((p) => (
         <SidebarPodcastItem
           key={p.collectionId}
           podcast={p}
           isSelected={p.collectionId == selectedPodcastId}
-          onSelect={() => setSelectedPodcastId(p.collectionId)}
+          onSelect={() => selectPodcast(p.collectionId)}
         />
       ))}
       <Vertical style={{ padding: 10 }}>

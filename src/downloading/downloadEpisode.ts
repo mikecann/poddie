@@ -3,8 +3,8 @@ import * as fs from "fs";
 import { remote } from "electron";
 import * as path from "path";
 import * as got from "got";
-import { ensure } from "../utils/ensure";
 import { Podcast } from "../features/podcasts";
+import { ensure } from "../utils/misc";
 //import { electron } from "../index";
 
 // const { remote, app } = electron;

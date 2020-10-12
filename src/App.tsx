@@ -1,30 +1,17 @@
 import { Horizontal, Stretch, Vertical } from "gls/lib";
 import * as React from "react";
-import {
-  addedPodcastsAtom,
-  searchPodcasts,
-  selectedPodcastIdAtom,
-} from "./features/podcasts";
 import { Sidebar } from "./sidebar/Sidebar";
 import { backgroundColor } from "./styles";
 import { AddPodcastModal } from "./addPodcast/AddPodcastModal";
-import { useAtom } from "jotai";
 import { PodcastDetails } from "./podcastDetails/PodcastDetails";
 import { PodcastPlayer } from "./player/PodcastPlayer";
-import { PodcastInfoModal } from "./podcastInfo/PodcastInfoModal";
+import { useStore } from "effector-react";
+import { selectedPodcastStore } from "./state/app";
 
 interface Props {}
 
 export const App: React.FC<Props> = ({}) => {
-  const [selectedPodcastId, setSelectedPodcastId] = useAtom(
-    selectedPodcastIdAtom
-  );
-
-  const [addedPodcasts] = useAtom(addedPodcastsAtom);
-
-  const selectedPodcast = addedPodcasts.find(
-    (p) => p.collectionId == selectedPodcastId
-  );
+  const selectedPodcast = useStore(selectedPodcastStore);
 
   return (
     <Vertical
@@ -51,7 +38,6 @@ export const App: React.FC<Props> = ({}) => {
         </Horizontal>
       </Stretch>
       <PodcastPlayer />
-      <PodcastInfoModal />
       <AddPodcastModal />
     </Vertical>
   );

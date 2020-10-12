@@ -1,18 +1,15 @@
-import { Horizontal, Stretch, Vertical, VerticalSpacer } from "gls/lib";
+import { Horizontal, Stretch, Vertical } from "gls/lib";
 import * as React from "react";
-import { Podcast, searchPodcasts } from "../features/podcasts";
+import { Podcast } from "../features/podcasts";
 import { useQuery } from "react-query";
 import { loadPodcastFeed } from "../features/rss";
 import { PodcastDetailsFeedItem } from "./PodcastDetailsFeedItem";
 import { Alert, Spin } from "antd";
-import Icon, { InfoCircleOutlined, InfoOutlined } from "@ant-design/icons";
-import { useAtom } from "jotai";
-import {
-  podcastInfoModalIsOpenAtom,
-  podcastInfoModalPodcastAtom,
-} from "../podcastInfo/PodcastInfoModal";
+import Icon, { InfoCircleOutlined } from "@ant-design/icons";
 import { downloadEpisode } from "../downloading/downloadEpisode";
 import { Item } from "rss-parser";
+import { setFalse, setTrue } from "../utils/misc";
+import { PodcastInfoModal } from "../podcastInfo/PodcastInfoModal";
 
 interface Props {
   podcast: Podcast;
@@ -22,13 +19,7 @@ export const PodcastDetails: React.FC<Props> = ({ podcast }) => {
   const { collectionName, feedUrl } = podcast;
 
   const [seletedItemId, setSelectedItemId] = React.useState<string>();
-  const [_, setPodcastInfoModalIsOpen] = useAtom(podcastInfoModalIsOpenAtom);
-  const [__, setPodcastInfoModalPodcast] = useAtom(podcastInfoModalPodcastAtom);
-
-  const onInfoIconClicked = () => {
-    setPodcastInfoModalPodcast(podcast);
-    setPodcastInfoModalIsOpen(true);
-  };
+  const [moreInfoOpen, setMoreInfoOpen] = React.useState(false);
 
   const { isLoading, error, data } = useQuery(["podcast-feed", feedUrl], () =>
     loadPodcastFeed(feedUrl)
@@ -44,7 +35,7 @@ export const PodcastDetails: React.FC<Props> = ({ podcast }) => {
         </Stretch>
         <InfoCircleOutlined
           style={{ fontSize: "2em", cursor: "pointer" }}
-          onClick={onInfoIconClicked}
+          onClick={setTrue(setMoreInfoOpen)}
         />
       </Horizontal>
       {isLoading && <Spin tip="Loading Feed..." />}
@@ -66,6 +57,12 @@ export const PodcastDetails: React.FC<Props> = ({ podcast }) => {
           />
         ))}
       </Vertical>
+
+      <PodcastInfoModal
+        podcast={podcast}
+        isOpen={moreInfoOpen}
+        onClose={setFalse(setMoreInfoOpen)}
+      />
     </Vertical>
   );
 };

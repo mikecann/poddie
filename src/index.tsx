@@ -1,11 +1,8 @@
 import { GLSDefaults } from "gls/lib";
-import { Provider } from "jotai";
 import React from "react";
 import ReactDOM from "react-dom";
 import { queryCache, ReactQueryCacheProvider } from "react-query";
 import { App } from "./App";
-import { addedPodcastsAtom, selectedPodcastIdAtom } from "./features/podcasts";
-import { AtomPersistor } from "./persistance/AtomPersistor";
 import {
   startPersistingQueryCache,
   depersistQueryCache,
@@ -16,27 +13,12 @@ const bootstrap = () => {
   depersistQueryCache();
   startPersistingQueryCache();
 
-
   ReactDOM.render(
-    <Provider>
-      <AtomPersistor
-        atom={addedPodcastsAtom}
-        defaultValue={[]}
-        storageKey={"savedPodcasts"}
-      />
-      <AtomPersistor
-        atom={selectedPodcastIdAtom}
-        defaultValue={null}
-        storageKey={"selectedPodcastId"}
-      />
-      <GLSDefaults.Provider
-        value={{ verticalSpacing: 0, horizontalSpacing: 0 }}
-      >
-        <ReactQueryCacheProvider queryCache={queryCache}>
-          <App />
-        </ReactQueryCacheProvider>
-      </GLSDefaults.Provider>
-    </Provider>,
+    <GLSDefaults.Provider value={{ verticalSpacing: 0, horizontalSpacing: 0 }}>
+      <ReactQueryCacheProvider queryCache={queryCache}>
+        <App />
+      </ReactQueryCacheProvider>
+    </GLSDefaults.Provider>,
     document.getElementById("root")
   );
 };

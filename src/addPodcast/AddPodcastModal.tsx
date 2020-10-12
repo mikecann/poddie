@@ -1,25 +1,22 @@
 import * as React from "react";
-import { atom, useAtom } from "jotai";
-import {
-  Podcast,
-  searchPodcasts,
-  addedPodcastsAtom,
-} from "../features/podcasts";
+import { searchPodcasts } from "../features/podcasts";
 import { Modal } from "antd";
 import Search from "antd/lib/input/Search";
 import { Vertical, VerticalSpacer } from "gls/lib";
 import { useQuery } from "react-query";
 import { AddPodcastModalSearchItem } from "./AddPodcastModalSearchItem";
+import { useStore } from "effector-react";
+import { addSavedPodcast, closeModal, modalsStore } from "../state/app";
 
 interface Props {}
 
-export const addPodcastModalIsOpenAtom = atom(false);
-
 export const AddPodcastModal: React.FC<Props> = ({}) => {
-  const [isOpen, setIsOpen] = useAtom(addPodcastModalIsOpenAtom);
-  const [_, setSavedPodcasts] = useAtom(addedPodcastsAtom);
+  const modals = useStore(modalsStore);
   const [searchTerm, setSearchTerm] = React.useState("");
   const [selectedPodcastId, setSelectedPodcastId] = React.useState<number>();
+
+  const isOpen = modals.addPodcast.isOpen;
+  const close = () => closeModal("addPodcast");
 
   const { isLoading, error, data } = useQuery(
     ["podcast-search", searchTerm],
@@ -32,15 +29,15 @@ export const AddPodcastModal: React.FC<Props> = ({}) => {
 
   const onAddPodcast = () => {
     if (!selectedPodcast) return;
-    setIsOpen(false);
-    setSavedPodcasts((p) => [...p, selectedPodcast]);
+    close();
+    addSavedPodcast(selectedPodcast);
   };
 
   return (
     <Modal
       title="Add Podcast"
       visible={isOpen}
-      onCancel={() => setIsOpen(false)}
+      onCancel={close}
       okButtonProps={{ disabled: !selectedPodcast }}
       onOk={onAddPodcast}
       centered
