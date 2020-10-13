@@ -1,5 +1,5 @@
-import { Episode, Podcast } from "./features/podcasts";
 import { ipcMain, ipcRenderer, BrowserWindow } from "electron";
+import { Podcast, Episode } from "./features/podcasts/podcastsSlice";
 
 export type IPCMessages = {
   "download-episode": {

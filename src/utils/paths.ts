@@ -1,9 +1,10 @@
 import { existsSync, mkdirSync } from "fs";
 import { dirname } from "path";
 import path from "path";
-import { Episode, Podcast } from "../features/podcasts";
 import { app } from "electron";
+
 import { ensure } from "./misc";
+import { Podcast, Episode } from "../features/podcasts/podcastsSlice";
 
 export function mkdirRecurse(inputPath: string) {
   if (existsSync(inputPath)) {

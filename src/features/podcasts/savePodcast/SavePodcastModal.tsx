@@ -1,36 +1,37 @@
 import * as React from "react";
-import { searchPodcasts } from "../features/podcasts";
 import { Modal } from "antd";
 import Search from "antd/lib/input/Search";
 import { Vertical, VerticalSpacer } from "gls/lib";
 import { useQuery } from "react-query";
-import { AddPodcastModalSearchItem } from "./AddPodcastModalSearchItem";
-import { useStore } from "effector-react";
-import { addSavedPodcast, closeModal, modalsStore } from "../state/app";
+import { SavePodcastModalSearchItem } from "./SavePodcastModalSearchItem";
+import { useDispatch, useSelector } from "../../../app/store";
+import { closeModal } from "../../modals/modalsSlice";
+import { addSavedPodcast } from "../podcastsSlice";
+import { searchPodcasts } from "../podcasts";
 
 interface Props {}
 
-export const AddPodcastModal: React.FC<Props> = ({}) => {
-  const modals = useStore(modalsStore);
+export const SavePodcastModal: React.FC<Props> = ({}) => {
+  const dispatch = useDispatch();
+  const {
+    savePodcast: { isOpen },
+  } = useSelector((state) => state.modals);
+
   const [searchTerm, setSearchTerm] = React.useState("");
   const [selectedPodcastId, setSelectedPodcastId] = React.useState<number>();
 
-  const isOpen = modals.addPodcast.isOpen;
-  const close = () => closeModal("addPodcast");
+  const close = () => dispatch(closeModal("savePodcast"));
 
-  const { isLoading, error, data } = useQuery(
-    ["podcast-search", searchTerm],
-    () => searchPodcasts(searchTerm)
+  const { isLoading, error, data } = useQuery(["podcast-search", searchTerm], () =>
+    searchPodcasts(searchTerm)
   );
 
-  const selectedPodcast = data?.find(
-    (p) => p.collectionId == selectedPodcastId
-  );
+  const selectedPodcast = data?.find((p) => p.collectionId == selectedPodcastId);
 
   const onAddPodcast = () => {
     if (!selectedPodcast) return;
     close();
-    addSavedPodcast(selectedPodcast);
+    dispatch(addSavedPodcast(selectedPodcast));
   };
 
   return (
@@ -43,11 +44,7 @@ export const AddPodcastModal: React.FC<Props> = ({}) => {
       centered
     >
       <Vertical>
-        <Search
-          placeholder="search itunes.."
-          onSearch={setSearchTerm}
-          style={{ width: "100%" }}
-        />
+        <Search placeholder="search itunes.." onSearch={setSearchTerm} style={{ width: "100%" }} />
         {isLoading && <div>Loading..</div>}
         {error && (
           <div>
@@ -58,7 +55,7 @@ export const AddPodcastModal: React.FC<Props> = ({}) => {
         {data &&
           data.length > 0 &&
           data.map((pod) => (
-            <AddPodcastModalSearchItem
+            <SavePodcastModalSearchItem
               key={pod.collectionId}
               podcast={pod}
               isSelected={selectedPodcastId == pod.collectionId}

@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Modal } from "antd";
-import { useWindowSize } from "../utils/useWindowSize";
-import { Podcast } from "../features/podcasts";
+import { useWindowSize } from "../../../utils/useWindowSize";
+import { Podcast } from "../podcastsSlice";
 
 interface Props {
   isOpen: boolean;
@@ -9,11 +9,7 @@ interface Props {
   onClose: () => any;
 }
 
-export const PodcastInfoModal: React.FC<Props> = ({
-  isOpen,
-  podcast,
-  onClose,
-}) => {
+export const PodcastInfoModal: React.FC<Props> = ({ isOpen, podcast, onClose }) => {
   const { innerHeight, innerWidth } = useWindowSize();
 
   if (!podcast) return null;

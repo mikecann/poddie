@@ -1,17 +1,17 @@
 import { Horizontal, Stretch, Vertical } from "gls/lib";
 import * as React from "react";
-import { Sidebar } from "./sidebar/Sidebar";
+import { Sidebar } from "./features/sidebar/Sidebar";
 import { backgroundColor } from "./styles";
-import { AddPodcastModal } from "./addPodcast/AddPodcastModal";
-import { PodcastDetails } from "./podcastDetails/PodcastDetails";
-import { PodcastPlayer } from "./player/PodcastPlayer";
-import { useStore } from "effector-react";
-import { selectedPodcastStore } from "./state/app";
+import { SavePodcastModal } from "./features/podcasts/savePodcast/SavePodcastModal";
+import { PodcastDetails } from "./features/podcasts/podcastDetails/PodcastDetails";
+import { PodcastPlayer } from "./features/player/PodcastPlayer";
+import { useSelector } from "./app/store";
+import { selectSelectedPodcast } from "./features/podcasts/podcastsSlice";
 
 interface Props {}
 
 export const App: React.FC<Props> = ({}) => {
-  const selectedPodcast = useStore(selectedPodcastStore);
+  const selectedPodcast = useSelector(selectSelectedPodcast);
 
   return (
     <Vertical
@@ -38,7 +38,7 @@ export const App: React.FC<Props> = ({}) => {
         </Horizontal>
       </Stretch>
       <PodcastPlayer />
-      <AddPodcastModal />
+      <SavePodcastModal />
     </Vertical>
   );
 };

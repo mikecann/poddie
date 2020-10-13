@@ -1,12 +1,7 @@
 import { Horizontal, Vertical, HorizontalSpacer, Stretch } from "gls/lib";
 import * as React from "react";
-import { Podcast } from "../features/podcasts";
 import { Button, Popover } from "antd";
-import {
-  HeartOutlined,
-  InfoCircleOutlined,
-  PlayCircleFilled,
-} from "@ant-design/icons";
+import { HeartOutlined, InfoCircleOutlined, PlayCircleFilled } from "@ant-design/icons";
 import { Item } from "rss-parser";
 
 interface Props {
@@ -42,9 +37,7 @@ export const PodcastDetailsFeedItem: React.FC<Props> = ({
       verticalAlign="center"
     >
       {/* <img src={artworkUrl100} /> */}
-      <HeartOutlined
-        style={{ fontSize: "1.25em", cursor: "pointer", marginLeft: 10 }}
-      />
+      <HeartOutlined style={{ fontSize: "1.25em", cursor: "pointer", marginLeft: 10 }} />
       <Stretch>
         <Vertical>
           <h4 style={{ color: "white" }}>{title}</h4>

@@ -1,8 +1,6 @@
 import { Horizontal, Vertical, HorizontalSpacer, Stretch } from "gls/lib";
 import * as React from "react";
-import { Podcast } from "../features/podcasts";
-import { Button, Popover } from "antd";
-import { InfoCircleOutlined } from "@ant-design/icons";
+import { Podcast } from "../podcasts/podcastsSlice";
 
 interface Props {
   podcast: Podcast;
@@ -10,11 +8,7 @@ interface Props {
   isSelected: boolean;
 }
 
-export const SidebarPodcastItem: React.FC<Props> = ({
-  podcast,
-  onSelect,
-  isSelected,
-}) => {
+export const SidebarPodcastItem: React.FC<Props> = ({ podcast, onSelect, isSelected }) => {
   const [over, setOver] = React.useState(false);
   const { artworkUrl100, collectionName } = podcast;
   return (

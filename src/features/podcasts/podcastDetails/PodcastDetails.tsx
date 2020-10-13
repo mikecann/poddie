@@ -1,14 +1,17 @@
 import { Horizontal, Stretch, Vertical } from "gls/lib";
 import * as React from "react";
-import { Podcast, loadPodcastFeed } from "../features/podcasts";
 import { useQuery } from "react-query";
 import { PodcastDetailsFeedItem } from "./PodcastDetailsFeedItem";
 import { Alert, Spin } from "antd";
 import Icon, { InfoCircleOutlined } from "@ant-design/icons";
-import { downloadEpisode } from "../features/downloads";
+import { downloadEpisodeFromIPC } from "../../downloads/downloadEpisodeFromIPC";
 import { Item } from "rss-parser";
-import { setFalse, setTrue } from "../utils/misc";
+import { setFalse, setTrue } from "../../../utils/misc";
 import { PodcastInfoModal } from "../podcastInfo/PodcastInfoModal";
+import { loadPodcastFeed } from "../podcasts";
+import { Podcast } from "../podcastsSlice";
+import { useDispatch } from "react-redux";
+import { downloadEpisode } from "../../downloads/downloadsSlice";
 
 interface Props {
   podcast: Podcast;
@@ -16,7 +19,7 @@ interface Props {
 
 export const PodcastDetails: React.FC<Props> = ({ podcast }) => {
   const { collectionName, feedUrl } = podcast;
-
+  const dispatch = useDispatch();
   const [seletedItemId, setSelectedItemId] = React.useState<string>();
   const [moreInfoOpen, setMoreInfoOpen] = React.useState(false);
 
@@ -24,7 +27,7 @@ export const PodcastDetails: React.FC<Props> = ({ podcast }) => {
     loadPodcastFeed(feedUrl)
   );
 
-  const onPlayClicked = (episode: Item) => downloadEpisode(podcast, episode);
+  const onPlayClicked = (episode: Item) => dispatch(downloadEpisode(podcast, episode));
 
   return (
     <Vertical style={{ padding: 20, width: "100%" }} spacing={20}>

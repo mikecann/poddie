@@ -1,8 +1,8 @@
 import { Button, Popover } from "antd";
 import { Horizontal, HorizontalSpacer, Stretch, Vertical } from "gls/lib";
 import * as React from "react";
-import { Podcast } from "../features/podcasts";
 import { InfoCircleOutlined } from "@ant-design/icons";
+import { Podcast } from "../podcastsSlice";
 
 interface Props {
   podcast: Podcast;
@@ -10,11 +10,7 @@ interface Props {
   isSelected: boolean;
 }
 
-export const AddPodcastModalSearchItem: React.FC<Props> = ({
-  podcast,
-  onSelect,
-  isSelected,
-}) => {
+export const SavePodcastModalSearchItem: React.FC<Props> = ({ podcast, onSelect, isSelected }) => {
   const [over, setOver] = React.useState(false);
   const { artworkUrl100, collectionName } = podcast;
   return (
