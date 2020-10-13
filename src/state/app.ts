@@ -1,5 +1,5 @@
-import { createEvent, createStore } from "effector";
-import { Podcast } from "../features/podcasts";
+import { createEffect, createEvent, createStore } from "effector";
+import { Episode, Podcast, hasEpisodeBeenDownloaded } from "../features/podcasts";
 import { produce } from "immer";
 import withStorage from "effector-storage";
 
@@ -47,6 +47,14 @@ export const addSavedPodcast = createEvent<Podcast>();
 export const removeSavedPodcast = createEvent<number>();
 
 export const selectPodcast = createEvent<number | null>();
+
+/**
+ * Effects
+ */
+
+export const downloadEpisodeEffect = createEffect(async (podcast: Podcast, episode: Episode) => {
+  if (hasEpisodeBeenDownloaded(podcast, episode)) return;
+});
 
 /**
  * Stores

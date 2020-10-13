@@ -1,12 +1,11 @@
 import { Horizontal, Stretch, Vertical } from "gls/lib";
 import * as React from "react";
-import { Podcast } from "../features/podcasts";
+import { Podcast, loadPodcastFeed } from "../features/podcasts";
 import { useQuery } from "react-query";
-import { loadPodcastFeed } from "../features/rss";
 import { PodcastDetailsFeedItem } from "./PodcastDetailsFeedItem";
 import { Alert, Spin } from "antd";
 import Icon, { InfoCircleOutlined } from "@ant-design/icons";
-import { downloadEpisode } from "../downloading/downloadEpisode";
+import { downloadEpisode } from "../features/downloads";
 import { Item } from "rss-parser";
 import { setFalse, setTrue } from "../utils/misc";
 import { PodcastInfoModal } from "../podcastInfo/PodcastInfoModal";
@@ -40,11 +39,7 @@ export const PodcastDetails: React.FC<Props> = ({ podcast }) => {
       </Horizontal>
       {isLoading && <Spin tip="Loading Feed..." />}
       {error && (
-        <Alert
-          message={"Feed Load Error!"}
-          description={JSON.stringify(error)}
-          type="error"
-        />
+        <Alert message={"Feed Load Error!"} description={JSON.stringify(error)} type="error" />
       )}
       <Vertical spacing={5}>
         {data?.items?.map((item, i) => (

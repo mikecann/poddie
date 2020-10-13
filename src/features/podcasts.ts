@@ -1,3 +1,8 @@
+import { Item } from "rss-parser";
+import Parser from "rss-parser";
+import { existsSync } from "fs";
+import { getEpisodeDownloadPath } from "../utils/paths";
+
 export interface ITunesAPIRequestResponse {
   resultCount: number;
   results: Podcast[];
@@ -39,6 +44,8 @@ export type Podcast = {
   genres: string[];
 };
 
+export type Episode = Item;
+
 export const createPodcast = (overrides?: Partial<Podcast>): Podcast => ({
   ...(overrides as any),
 });
@@ -52,3 +59,13 @@ export const searchPodcasts = async (term: string) => {
 
   return json.results;
 };
+
+export const loadPodcastFeed = async (rssUrl: string) => {
+  const parser = new Parser();
+  const feed = await parser.parseURL(rssUrl);
+  console.log("getPodcastFeed -> feed", feed);
+  return feed;
+};
+
+export const hasEpisodeBeenDownloaded = (podcast: Podcast, episode: Episode) =>
+  existsSync(getEpisodeDownloadPath(podcast, episode));
