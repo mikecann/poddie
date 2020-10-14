@@ -1,14 +1,14 @@
 import { createSelector, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { getPodcastIdFromPodcast } from "./podcasts";
+import { getPodcastIdFromPodcastSearchItem } from "./podcasts";
 import { Item } from "rss-parser";
 import { RootState } from "../../app/rootReducer";
 
 export interface ITunesAPIRequestResponse {
   resultCount: number;
-  results: Podcast[];
+  results: PodcastSearchItem[];
 }
 
-export type Podcast = {
+export type PodcastSearchItem = {
   name: string;
   wrapperType: string;
   kind: string;
@@ -44,19 +44,23 @@ export type Podcast = {
   genres: string[];
 };
 
+export type SavedPodcast = PodcastSearchItem & {
+  id: PodcastId;
+};
+
 export type Episode = Item;
 
-export type PodcastId = number;
+export type PodcastId = string;
 
-export type EppisodeId = string;
+export type EpisodeId = string;
 
 interface State {
-  savedPodcasts: Podcast[];
+  savedPodcasts: Record<PodcastId, SavedPodcast>;
   selectedPodcastId: PodcastId | null;
 }
 
 const initialState: State = {
-  savedPodcasts: [],
+  savedPodcasts: {},
   selectedPodcastId: null,
 };
 
@@ -64,13 +68,12 @@ const slice = createSlice({
   name: "app",
   initialState,
   reducers: {
-    addSavedPodcast(state, action: PayloadAction<Podcast>) {
-      state.savedPodcasts.push(action.payload);
+    addSavedPodcast(state, { payload }: PayloadAction<PodcastSearchItem>) {
+      const id = getPodcastIdFromPodcastSearchItem(payload);
+      state.savedPodcasts[id] = { ...payload, id };
     },
-    removeSavedPodcast(state, action: PayloadAction<PodcastId>) {
-      state.savedPodcasts = state.savedPodcasts.filter(
-        (p) => getPodcastIdFromPodcast(p) != action.payload
-      );
+    removeSavedPodcast(state, { payload }: PayloadAction<PodcastId>) {
+      delete state.savedPodcasts[payload];
     },
     selectPodcast(state, action: PayloadAction<PodcastId | null>) {
       state.selectedPodcastId = action.payload;
@@ -82,5 +85,5 @@ export const { addSavedPodcast, removeSavedPodcast, selectPodcast } = slice.acti
 
 export const podcastsReducer = slice.reducer;
 
-export const selectSelectedPodcast = ({ podcasts }: RootState): Podcast | null =>
-  podcasts.savedPodcasts.find((p) => p.collectionId == podcasts.selectedPodcastId);
+export const selectSelectedPodcast = ({ podcasts }: RootState): SavedPodcast | null =>
+  podcasts.savedPodcasts[podcasts.selectedPodcastId];

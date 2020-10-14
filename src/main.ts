@@ -1,6 +1,6 @@
 import { app, BrowserWindow, ipcMain } from "electron";
 import electronDl, { download } from "electron-dl";
-import { onMessageFromRenderer } from "./ipc";
+import { onMessageFromRenderer, sendMessageToRenderer } from "./ipc";
 import { ensure } from "./utils/misc";
 import path from "path";
 import {
@@ -38,7 +38,7 @@ const onReady = (): void => {
   mainWindow.webContents.openDevTools();
 
   // Borrowed from: https://stackoverflow.com/questions/46102851/electron-download-a-file-to-a-specific-location
-  onMessageFromRenderer("download-episode", async (event, { podcast, episode }) => {
+  onMessageFromRenderer("download-episode", async (event, { podcast, episode, id }) => {
     const remoteUrl = getEpisodeRemoteUrl(episode);
     const filename = getEpisodeFilename(episode);
     const directory = getPodcastDownloadDirectory(podcast);
@@ -56,10 +56,19 @@ const onReady = (): void => {
       filename,
       onStarted: (item) => console.log("download started.."),
       openFolderWhenDone: true,
-      onProgress: (progress) => console.log("download progress", progress.percent),
+      onProgress: ({ percent }) => {
+        sendMessageToRenderer("download-progress", { id, progress: percent });
+        console.log("download progress", percent);
+      },
     })
-      .then((item) => console.log("download finished", item.getSavePath()))
-      .catch((err) => console.error("download error", err));
+      .then((item) => {
+        sendMessageToRenderer("download-success", { id });
+        console.log("download finished", item.getSavePath());
+      })
+      .catch((error) => {
+        sendMessageToRenderer("download-error", { id, error: error + "" });
+        console.error("download error", error);
+      });
   });
 };
 

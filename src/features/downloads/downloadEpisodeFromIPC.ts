@@ -1,9 +1,9 @@
 import { onMessageFromMain, sendMessageToMain } from "../../ipc";
 import { hasEpisodeBeenDownloaded } from "../podcasts/podcasts";
-import { Podcast, Episode } from "../podcasts/podcastsSlice";
+import { PodcastSearchItem, Episode } from "../podcasts/podcastsSlice";
 
 export const downloadEpisodeFromIPC = (
-  podcast: Podcast,
+  podcast: PodcastSearchItem,
   episode: Episode,
   id: string,
   onProgress: (progressPercent: number) => any

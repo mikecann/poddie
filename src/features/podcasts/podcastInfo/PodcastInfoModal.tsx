@@ -1,11 +1,11 @@
 import * as React from "react";
 import { Modal } from "antd";
 import { useWindowSize } from "../../../utils/useWindowSize";
-import { Podcast } from "../podcastsSlice";
+import { PodcastSearchItem } from "../podcastsSlice";
 
 interface Props {
   isOpen: boolean;
-  podcast: Podcast;
+  podcast: PodcastSearchItem;
   onClose: () => any;
 }
 

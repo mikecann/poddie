@@ -9,12 +9,12 @@ import { Item } from "rss-parser";
 import { setFalse, setTrue } from "../../../utils/misc";
 import { PodcastInfoModal } from "../podcastInfo/PodcastInfoModal";
 import { loadPodcastFeed } from "../podcasts";
-import { Podcast } from "../podcastsSlice";
+import { PodcastSearchItem, SavedPodcast } from "../podcastsSlice";
 import { useDispatch } from "react-redux";
 import { downloadEpisode } from "../../downloads/downloadsSlice";
 
 interface Props {
-  podcast: Podcast;
+  podcast: SavedPodcast;
 }
 
 export const PodcastDetails: React.FC<Props> = ({ podcast }) => {

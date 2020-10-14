@@ -1,15 +1,22 @@
 import Parser from "rss-parser";
 import { existsSync } from "fs";
 import { getEpisodeDownloadPath } from "../../utils/paths";
-import { Podcast, PodcastId, ITunesAPIRequestResponse, Episode, EppisodeId } from "./podcastsSlice";
+import {
+  PodcastSearchItem,
+  PodcastId,
+  ITunesAPIRequestResponse,
+  Episode,
+  EpisodeId,
+} from "./podcastsSlice";
 import { ensure } from "../../utils/misc";
 
-export const getPodcastIdFromPodcast = (podcast: Podcast): PodcastId => podcast.collectionId;
+export const getPodcastIdFromPodcastSearchItem = (podcast: PodcastSearchItem): PodcastId =>
+  podcast.collectionId + "";
 
-export const getEpisodeIdFromEpisode = (episode: Episode): EppisodeId =>
+export const getEpisodeIdFromEpisode = (episode: Episode): EpisodeId =>
   ensure(episode.guid, `episode must have a guid`);
 
-export const createPodcast = (overrides?: Partial<Podcast>): Podcast => ({
+export const createPodcast = (overrides?: Partial<PodcastSearchItem>): PodcastSearchItem => ({
   ...(overrides as any),
 });
 
@@ -30,5 +37,5 @@ export const loadPodcastFeed = async (rssUrl: string) => {
   return feed;
 };
 
-export const hasEpisodeBeenDownloaded = (podcast: Podcast, episode: Episode) =>
+export const hasEpisodeBeenDownloaded = (podcast: PodcastSearchItem, episode: Episode) =>
   existsSync(getEpisodeDownloadPath(podcast, episode));

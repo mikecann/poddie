@@ -1,10 +1,10 @@
 import { ipcMain, ipcRenderer, BrowserWindow } from "electron";
-import { Podcast, Episode } from "./features/podcasts/podcastsSlice";
+import { PodcastSearchItem, Episode } from "./features/podcasts/podcastsSlice";
 
 export type IPCMessages = {
   "download-episode": {
     id: string;
-    podcast: Podcast;
+    podcast: PodcastSearchItem;
     episode: Episode;
   };
   "download-success": {

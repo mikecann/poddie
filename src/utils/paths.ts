@@ -4,7 +4,7 @@ import path from "path";
 import { app } from "electron";
 
 import { ensure } from "./misc";
-import { Podcast, Episode } from "../features/podcasts/podcastsSlice";
+import { PodcastSearchItem, Episode } from "../features/podcasts/podcastsSlice";
 
 export function mkdirRecurse(inputPath: string) {
   if (existsSync(inputPath)) {
@@ -24,7 +24,7 @@ export const getExtensionFromUrl = (url: string, defaultValue = ".mp3") => {
 
 export const getDownloadsDirectory = () => path.join(app.getPath("userData"), "/downloads");
 
-export const getPodcastDownloadDirectory = (podcast: Podcast) =>
+export const getPodcastDownloadDirectory = (podcast: PodcastSearchItem) =>
   path.join(getDownloadsDirectory(), podcast.collectionName || "misc");
 
 export const getEpisodeRemoteUrl = (episode: Episode) => ensure(episode.enclosure).url;
@@ -34,5 +34,5 @@ export const getEpisodeFilename = (episode: Episode) => {
   return `${episode.title}.${episode.guid}${extension}`;
 };
 
-export const getEpisodeDownloadPath = (podcast: Podcast, episode: Episode) =>
+export const getEpisodeDownloadPath = (podcast: PodcastSearchItem, episode: Episode) =>
   path.join(getPodcastDownloadDirectory(podcast), getEpisodeFilename(episode));

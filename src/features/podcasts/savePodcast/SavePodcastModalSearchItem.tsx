@@ -2,10 +2,10 @@ import { Button, Popover } from "antd";
 import { Horizontal, HorizontalSpacer, Stretch, Vertical } from "gls/lib";
 import * as React from "react";
 import { InfoCircleOutlined } from "@ant-design/icons";
-import { Podcast } from "../podcastsSlice";
+import { PodcastSearchItem } from "../podcastsSlice";
 
 interface Props {
-  podcast: Podcast;
+  podcast: PodcastSearchItem;
   onSelect: () => any;
   isSelected: boolean;
 }

@@ -22,12 +22,12 @@ export const Sidebar: React.FC<Props> = ({}) => {
         backgroundColor: backgroundColor.darken(0.05).toHexString(),
       }}
     >
-      {savedPodcasts.map((p) => (
+      {Object.values(savedPodcasts).map((p) => (
         <SidebarPodcastItem
-          key={p.collectionId}
+          key={p.id}
           podcast={p}
-          isSelected={p.collectionId == selectedPodcastId}
-          onSelect={() => dispatch(selectPodcast(p.collectionId))}
+          isSelected={p.id == selectedPodcastId}
+          onSelect={() => dispatch(selectPodcast(p.id))}
         />
       ))}
       <Vertical style={{ padding: 10 }}>

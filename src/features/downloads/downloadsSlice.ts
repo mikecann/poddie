@@ -1,10 +1,26 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AppThunk } from "../../app/store";
 import { generateId } from "../../utils/generateId";
-import { Episode, Podcast } from "../podcasts/podcastsSlice";
-import { DownloadId, DownloadState } from "./types";
-import { getEpisodeIdFromEpisode, getPodcastIdFromPodcast } from "../podcasts/podcasts";
+import {
+  Episode,
+  EpisodeId,
+  PodcastId,
+  PodcastSearchItem,
+  SavedPodcast,
+} from "../podcasts/podcastsSlice";
+import { getEpisodeIdFromEpisode, getPodcastIdFromPodcastSearchItem } from "../podcasts/podcasts";
 import { downloadEpisodeFromIPC } from "./downloadEpisodeFromIPC";
+
+export type DownloadId = string;
+
+export interface DownloadState {
+  id: DownloadId;
+  podcastId: PodcastId;
+  episodeId: EpisodeId;
+  progressPercent: number;
+  status: "downloading" | "success" | "error";
+  error?: string;
+}
 
 interface State {
   downloads: Record<DownloadId, DownloadState>;
@@ -20,7 +36,7 @@ const slice = createSlice({
   reducers: {
     downloadStarted(
       state,
-      action: PayloadAction<{ id: string; episodeId: string; podcastId: number }>
+      action: PayloadAction<{ id: DownloadId; episodeId: EpisodeId; podcastId: PodcastId }>
     ) {
       const { episodeId, id, podcastId } = action.payload;
       state.downloads[id] = {
@@ -32,15 +48,15 @@ const slice = createSlice({
       };
     },
 
-    downloadProgressed(state, action: PayloadAction<{ id: string; progress: number }>) {
+    downloadProgressed(state, action: PayloadAction<{ id: DownloadId; progress: number }>) {
       state.downloads[action.payload.id].progressPercent = action.payload.progress;
     },
 
-    downloadSuccess(state, action: PayloadAction<{ id: string }>) {
+    downloadSuccess(state, action: PayloadAction<{ id: DownloadId }>) {
       state.downloads[action.payload.id].status = "success";
     },
 
-    downloadError(state, action: PayloadAction<{ id: string; error: string }>) {
+    downloadError(state, action: PayloadAction<{ id: DownloadId; error: string }>) {
       state.downloads[action.payload.id].status = "error";
       state.downloads[action.payload.id].error = action.payload.error;
     },
@@ -56,10 +72,12 @@ export const {
 
 export const downloadsReducer = slice.reducer;
 
-export const downloadEpisode = (podcast: Podcast, episode: Episode): AppThunk => (dispatch) => {
+export const downloadEpisode = (podcast: SavedPodcast, episode: Episode): AppThunk => (
+  dispatch
+) => {
   const id = generateId();
   const episodeId = getEpisodeIdFromEpisode(episode);
-  const podcastId = getPodcastIdFromPodcast(podcast);
+  const podcastId = podcast.id;
 
   dispatch(downloadStarted({ episodeId, podcastId, id }));
 

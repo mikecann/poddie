@@ -1,9 +1,9 @@
 import { Horizontal, Vertical, HorizontalSpacer, Stretch } from "gls/lib";
 import * as React from "react";
-import { Podcast } from "../podcasts/podcastsSlice";
+import { PodcastSearchItem } from "../podcasts/podcastsSlice";
 
 interface Props {
-  podcast: Podcast;
+  podcast: PodcastSearchItem;
   onSelect: () => any;
   isSelected: boolean;
 }
