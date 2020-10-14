@@ -1,15 +1,15 @@
 import * as React from "react";
 import { Modal } from "antd";
 import { useWindowSize } from "../../../utils/useWindowSize";
-import { PodcastSearchItem } from "../podcastsSlice";
+import { PodcastITunesInfo } from "../../../api/itunes/types";
 
 interface Props {
-  isOpen: boolean;
-  podcast: PodcastSearchItem;
+  visible: boolean;
+  podcast: PodcastITunesInfo;
   onClose: () => any;
 }
 
-export const PodcastInfoModal: React.FC<Props> = ({ isOpen, podcast, onClose }) => {
+export const PodcastInfoModal: React.FC<Props> = ({ visible, podcast, onClose }) => {
   const { innerHeight, innerWidth } = useWindowSize();
 
   if (!podcast) return null;
@@ -19,7 +19,7 @@ export const PodcastInfoModal: React.FC<Props> = ({ isOpen, podcast, onClose }) 
   return (
     <Modal
       title={collectionName}
-      visible={isOpen}
+      visible={visible}
       onCancel={onClose}
       footer={null}
       centered

@@ -1,9 +1,9 @@
 import { Horizontal, Vertical, HorizontalSpacer, Stretch } from "gls/lib";
 import * as React from "react";
-import { PodcastSearchItem } from "../podcasts/podcastsSlice";
+import { PodcastITunesInfo } from "../../api/itunes/types";
 
 interface Props {
-  podcast: PodcastSearchItem;
+  podcast: PodcastITunesInfo;
   onSelect: () => any;
   isSelected: boolean;
 }
@@ -27,7 +27,7 @@ export const SidebarPodcastItem: React.FC<Props> = ({ podcast, onSelect, isSelec
       }}
       verticalAlign="center"
     >
-      <img src={artworkUrl100} />
+      <img style={{ objectFit: "cover" }} src={artworkUrl100} width={100} height={100} />
       <Stretch>
         <Vertical verticalAlign="center">
           <h4 style={{ color: "white" }}>{collectionName}</h4>

@@ -1,14 +1,17 @@
 import { ipcMain, ipcRenderer, BrowserWindow } from "electron";
-import { PodcastSearchItem, Episode } from "./features/podcasts/podcastsSlice";
+import { PodcastITunesInfo } from "./api/itunes/types";
+import { Episode } from "./features/episodes/episodesSlice";
+import { ensure } from "./utils/misc";
 
 export type IPCMessages = {
   "download-episode": {
     id: string;
-    podcast: PodcastSearchItem;
+    podcast: PodcastITunesInfo;
     episode: Episode;
   };
   "download-success": {
     id: string;
+    localPath: string;
   };
   "download-error": {
     id: string;
@@ -42,7 +45,7 @@ export const sendMessageToRenderer = <T extends keyof IPCMessages>(
   data: IPCMessages[T],
   window?: BrowserWindow
 ) => {
-  (window ?? BrowserWindow.getFocusedWindow()).webContents.send(messageName, data);
+  ensure(window ?? BrowserWindow.getFocusedWindow()).webContents.send(messageName, data);
 };
 
 export const sendMessageToMain = <T extends keyof IPCMessages>(

@@ -28,6 +28,7 @@ export const PodcastDetailsFeedItem: React.FC<Props> = ({
       onMouseLeave={() => setOver(false)}
       style={{
         cursor: isSelected ? undefined : "pointer",
+        color: "white",
         backgroundColor: isSelected
           ? "rgba(255,255,255,0.1)"
           : over

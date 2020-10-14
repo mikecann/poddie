@@ -2,10 +2,10 @@ import { Button, Popover } from "antd";
 import { Horizontal, HorizontalSpacer, Stretch, Vertical } from "gls/lib";
 import * as React from "react";
 import { InfoCircleOutlined } from "@ant-design/icons";
-import { PodcastSearchItem } from "../podcastsSlice";
+import { PodcastITunesInfo } from "../../../api/itunes/types";
 
 interface Props {
-  podcast: PodcastSearchItem;
+  podcast: PodcastITunesInfo;
   onSelect: () => any;
   isSelected: boolean;
 }
@@ -21,11 +21,7 @@ export const SavePodcastModalSearchItem: React.FC<Props> = ({ podcast, onSelect,
       onMouseLeave={() => setOver(false)}
       style={{
         cursor: isSelected ? undefined : "pointer",
-        backgroundColor: isSelected
-          ? "rgba(255,255,255,0.1)"
-          : over
-          ? "rgba(255,255,255,0.05)"
-          : "rgba(255,255,255,0.03)",
+        backgroundColor: isSelected ? "rgba(0,0,0,0.1)" : over ? "rgba(0,0,0,0.02)" : "white",
       }}
       verticalAlign="center"
     >
@@ -43,11 +39,10 @@ export const SavePodcastModalSearchItem: React.FC<Props> = ({ podcast, onSelect,
           </pre>
         }
       >
-        <Button>
+        <Button style={{ marginRight: 10 }}>
           <InfoCircleOutlined />
         </Button>
       </Popover>
-      <HorizontalSpacer space={20} />
     </Horizontal>
   );
 };

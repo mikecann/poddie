@@ -21,7 +21,7 @@ const reducer = persistReducer(
   {
     key: "AppState",
     storage,
-    whitelist: ["podcasts"],
+    whitelist: ["podcasts", "episodes"],
   },
   rootReducer
 );

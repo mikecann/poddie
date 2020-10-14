@@ -4,7 +4,8 @@ import path from "path";
 import { app } from "electron";
 
 import { ensure } from "./misc";
-import { PodcastSearchItem, Episode } from "../features/podcasts/podcastsSlice";
+import { PodcastITunesInfo } from "../api/itunes/types";
+import { Episode } from "../features/episodes/episodesSlice";
 
 export function mkdirRecurse(inputPath: string) {
   if (existsSync(inputPath)) {
@@ -24,15 +25,15 @@ export const getExtensionFromUrl = (url: string, defaultValue = ".mp3") => {
 
 export const getDownloadsDirectory = () => path.join(app.getPath("userData"), "/downloads");
 
-export const getPodcastDownloadDirectory = (podcast: PodcastSearchItem) =>
+export const getPodcastDownloadDirectory = (podcast: PodcastITunesInfo) =>
   path.join(getDownloadsDirectory(), podcast.collectionName || "misc");
 
-export const getEpisodeRemoteUrl = (episode: Episode) => ensure(episode.enclosure).url;
+export const getEpisodeRemoteUrl = (episode: Episode) => ensure(episode.feedInfo.enclosure).url;
 
 export const getEpisodeFilename = (episode: Episode) => {
   const extension = getExtensionFromUrl(getEpisodeRemoteUrl(episode), ".mp3");
-  return `${episode.title}.${episode.guid}${extension}`;
+  return `${episode.feedInfo.title}.${episode.id}${extension}`;
 };
 
-export const getEpisodeDownloadPath = (podcast: PodcastSearchItem, episode: Episode) =>
+export const getEpisodeDownloadPath = (podcast: PodcastITunesInfo, episode: Episode) =>
   path.join(getPodcastDownloadDirectory(podcast), getEpisodeFilename(episode));

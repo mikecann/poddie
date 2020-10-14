@@ -1,41 +1,23 @@
-import Parser from "rss-parser";
 import { existsSync } from "fs";
 import { getEpisodeDownloadPath } from "../../utils/paths";
-import {
-  PodcastSearchItem,
-  PodcastId,
-  ITunesAPIRequestResponse,
-  Episode,
-  EpisodeId,
-} from "./podcastsSlice";
+import { PodcastId } from "./podcastsSlice";
 import { ensure } from "../../utils/misc";
+import { PodcastITunesInfo } from "../../api/itunes/types";
+import { Episode } from "../episodes/episodesSlice";
+import { Item } from "rss-parser";
 
-export const getPodcastIdFromPodcastSearchItem = (podcast: PodcastSearchItem): PodcastId =>
+export const getPodcastIdFromPodcastSearchItem = (podcast: PodcastITunesInfo): PodcastId =>
   podcast.collectionId + "";
 
-export const getEpisodeIdFromEpisode = (episode: Episode): EpisodeId =>
-  ensure(episode.guid, `episode must have a guid`);
-
-export const createPodcast = (overrides?: Partial<PodcastSearchItem>): PodcastSearchItem => ({
-  ...(overrides as any),
-});
-
-export const searchPodcasts = async (term: string) => {
-  const response = await fetch(
-    `https://itunes.apple.com/search?term=${term}&entity=podcast&attributes=titleTerm,artistTerm&limit=200`
-  );
-
-  const json: ITunesAPIRequestResponse = await response.json();
-
-  return json.results;
-};
-
-export const loadPodcastFeed = async (rssUrl: string) => {
-  const parser = new Parser();
-  const feed = await parser.parseURL(rssUrl);
-  console.log("getPodcastFeed -> feed", feed);
-  return feed;
-};
-
-export const hasEpisodeBeenDownloaded = (podcast: PodcastSearchItem, episode: Episode) =>
+export const hasEpisodeBeenDownloaded = (podcast: PodcastITunesInfo, episode: Episode) =>
   existsSync(getEpisodeDownloadPath(podcast, episode));
+
+export const podcastRssFeedItemsToEpisodes = (podcastId: PodcastId, items: Item[]): Episode[] =>
+  items.map((item) => ({
+    id: ensure(item.guid, `episode must have a guid`),
+    feedInfo: item,
+    podcastId,
+    downloadState: {
+      status: "unknown",
+    },
+  }));

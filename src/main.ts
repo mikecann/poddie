@@ -43,15 +43,18 @@ const onReady = (): void => {
     const filename = getEpisodeFilename(episode);
     const directory = getPodcastDownloadDirectory(podcast);
 
+    const localPath = path.join(directory, filename);
+
     console.log("downloading podcast episode", {
       podcast,
       episode,
       remoteUrl,
       filename,
       directory,
+      localPath,
     });
 
-    download(mainWindow, ensure(episode.enclosure).url, {
+    download(mainWindow, ensure(episode.feedInfo.enclosure).url, {
       directory,
       filename,
       onStarted: (item) => console.log("download started.."),
@@ -62,7 +65,7 @@ const onReady = (): void => {
       },
     })
       .then((item) => {
-        sendMessageToRenderer("download-success", { id });
+        sendMessageToRenderer("download-success", { id, localPath });
         console.log("download finished", item.getSavePath());
       })
       .catch((error) => {

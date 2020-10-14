@@ -1,65 +1,58 @@
 import * as React from "react";
-import { Modal } from "antd";
+import { Alert, Modal } from "antd";
 import Search from "antd/lib/input/Search";
 import { Vertical, VerticalSpacer } from "gls/lib";
-import { useQuery } from "react-query";
 import { SavePodcastModalSearchItem } from "./SavePodcastModalSearchItem";
-import { useDispatch, useSelector } from "../../../app/store";
-import { closeModal } from "../../modals/modalsSlice";
-import { addSavedPodcast } from "../podcastsSlice";
-import { searchPodcasts } from "../podcasts";
+import { PodcastITunesInfo } from "../../../api/itunes/types";
 
-interface Props {}
+interface Props {
+  visible: boolean;
+  onClose: () => any;
+  selectedItem: PodcastITunesInfo | null;
+  onSaveSelectedPodcast: () => any;
+  onSearch: (term: string) => any;
+  onSetSelectedItem: (item: PodcastITunesInfo) => any;
+  isLoading?: boolean;
+  error?: string;
+  searchResults: PodcastITunesInfo[];
+}
 
-export const SavePodcastModal: React.FC<Props> = ({}) => {
-  const dispatch = useDispatch();
-  const {
-    savePodcast: { isOpen },
-  } = useSelector((state) => state.modals);
-
-  const [searchTerm, setSearchTerm] = React.useState("");
-  const [selectedPodcastId, setSelectedPodcastId] = React.useState<number>();
-
-  const close = () => dispatch(closeModal("savePodcast"));
-
-  const { isLoading, error, data } = useQuery(["podcast-search", searchTerm], () =>
-    searchPodcasts(searchTerm)
-  );
-
-  const selectedPodcast = data?.find((p) => p.collectionId == selectedPodcastId);
-
-  const onAddPodcast = () => {
-    if (!selectedPodcast) return;
-    close();
-    dispatch(addSavedPodcast(selectedPodcast));
-  };
-
+export const SavePodcastModal: React.FC<Props> = ({
+  visible,
+  onClose,
+  selectedItem,
+  onSaveSelectedPodcast,
+  onSearch,
+  onSetSelectedItem,
+  isLoading,
+  error,
+  searchResults,
+}) => {
   return (
     <Modal
       title="Add Podcast"
-      visible={isOpen}
-      onCancel={close}
-      okButtonProps={{ disabled: !selectedPodcast }}
-      onOk={onAddPodcast}
+      visible={visible}
+      onCancel={onClose}
+      okButtonProps={{ disabled: !selectedItem }}
+      onOk={onSaveSelectedPodcast}
       centered
     >
-      <Vertical>
-        <Search placeholder="search itunes.." onSearch={setSearchTerm} style={{ width: "100%" }} />
-        {isLoading && <div>Loading..</div>}
-        {error && (
-          <div>
-            Whoops! <pre>{JSON.stringify(error)}</pre>
-          </div>
-        )}
-        <VerticalSpacer space={20} />
-        {data &&
-          data.length > 0 &&
-          data.map((pod) => (
+      <Vertical spacing={20}>
+        <Search
+          placeholder="search itunes.."
+          onSearch={onSearch}
+          style={{ width: "100%" }}
+          loading={isLoading}
+        />
+        {error && <Alert message="Error" description={JSON.stringify(error)} type="error" />}
+        {searchResults &&
+          searchResults.length > 0 &&
+          searchResults.map((pod) => (
             <SavePodcastModalSearchItem
               key={pod.collectionId}
               podcast={pod}
-              isSelected={selectedPodcastId == pod.collectionId}
-              onSelect={() => setSelectedPodcastId(pod.collectionId)}
+              isSelected={selectedItem?.collectionId == pod.collectionId}
+              onSelect={() => onSetSelectedItem(pod)}
             />
           ))}
       </Vertical>

@@ -2,14 +2,16 @@
   "compilerOptions": {
     "allowJs": true,
     "module": "commonjs",
+    "strict": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
     "noImplicitAny": true,
     "sourceMap": true,
     "jsx": "react",
     "outDir": "dist",
+    "forceConsistentCasingInFileNames": true,
     "moduleResolution": "node",
     "resolveJsonModule": true
   },
-  "include": ["src/**/*"]
+  "include": ["src/**/*", "stories/**/*"]
 }

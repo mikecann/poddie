@@ -1,18 +1,20 @@
+import { PodcastITunesInfo } from "../../api/itunes/types";
 import { onMessageFromMain, sendMessageToMain } from "../../ipc";
-import { hasEpisodeBeenDownloaded } from "../podcasts/podcasts";
-import { PodcastSearchItem, Episode } from "../podcasts/podcastsSlice";
+import { generateId } from "../../utils/generateId";
+import { Episode } from "./episodesSlice";
 
 export const downloadEpisodeFromIPC = (
-  podcast: PodcastSearchItem,
+  podcast: PodcastITunesInfo,
   episode: Episode,
-  id: string,
   onProgress: (progressPercent: number) => any
 ) => {
-  return new Promise((resolve, reject) => {
+  const id = generateId();
+
+  return new Promise<string>((resolve, reject) => {
     const offDownloadSuccess = onMessageFromMain("download-success", (_, payload) => {
       if (id != payload.id) return;
       stopListeners();
-      resolve();
+      resolve(payload.localPath);
     });
 
     const offDownloadError = onMessageFromMain("download-error", (_, payload) => {
